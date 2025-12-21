@@ -31,6 +31,7 @@ export async function insertManufacturer(manufacturer: Manufacturer) {
     try {
         await clientDB.connect();
         manufacturer.createdAt = Date.now();
+        manufacturer.isDeleted = false;
         const result = await database.collection("Manufacturers").insertOne(manufacturer);
         await clientDB.close();
         return result;

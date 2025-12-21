@@ -11,6 +11,7 @@ export type Product = {
     images: string[];
     createdAt?: number;
     updatedAt?: number;
+    isDeleted?: boolean;
 }
 
 export function isProduct(product: unknown): product is Product {

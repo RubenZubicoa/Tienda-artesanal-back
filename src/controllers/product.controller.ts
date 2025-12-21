@@ -5,6 +5,7 @@ import {
   updateProduct as updateProductModel,
   deleteProduct as deleteProductModel,
   getProductsByManufacturerId as getProductsByManufacturerIdModel,
+  getProductById as getProductByIdModel,
 } from "../models/product.model";
 import { isProduct, Product } from "../types/Product";
 import { ObjectId } from "mongodb";
@@ -18,6 +19,17 @@ export async function getProducts(req: Request, res: Response) {
     res
       .status(500)
       .json({ message: "Error al obtener los productos", error: error });
+  }
+}
+
+export async function getProductById(req: Request<{ id: string }>, res: Response) {
+  const productId = new ObjectId(req.params.id);
+  try {
+    const product = await getProductByIdModel(productId);
+    res.status(200).json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener el producto", error: error });
   }
 }
 
