@@ -14,6 +14,19 @@ export async function getManufacturers() {
     }
 }
 
+export async function getManufacturerById(manufacturerId: Manufacturer['_id']) {
+    try {
+        await clientDB.connect();
+        const manufacturer = await database.collection("Manufacturers").findOne({ _id: manufacturerId });
+        await clientDB.close();
+        return manufacturer;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener el artesano");
+    }
+}
+
 export async function insertManufacturer(manufacturer: Manufacturer) {
     try {
         await clientDB.connect();

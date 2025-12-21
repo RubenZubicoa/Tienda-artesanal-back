@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
-import { database } from "../db/database";
 import { isManufacturer, Manufacturer } from "../types/Manufacturer";
-import { insertManufacturer, getManufacturers as getManufacturersModel, updateManufacturer as updateManufacturerModel, deleteManufacturer as deleteManufacturerModel } from "../models/manufacturer.model";
+import {
+  insertManufacturer,
+  getManufacturers as getManufacturersModel,
+  updateManufacturer as updateManufacturerModel,
+  deleteManufacturer as deleteManufacturerModel,
+  getManufacturerById as getManufacturerByIdModel,
+} from "../models/manufacturer.model";
 import { ObjectId } from "mongodb";
 
 export async function getManufacturers(req: Request, res: Response) {
@@ -10,7 +15,27 @@ export async function getManufacturers(req: Request, res: Response) {
     res.status(200).json(manufacturers);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al obtener los artesanos", error: error });
+    res
+      .status(500)
+      .json({ message: "Error al obtener los artesanos", error: error });
+  }
+}
+
+export async function getManufacturerById(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  const manufacturerId = req.params.id;
+  try {
+    const manufacturer = await getManufacturerByIdModel(
+      new ObjectId(manufacturerId)
+    );
+    res.status(200).json(manufacturer);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener el artesano", error: error });
   }
 }
 
@@ -27,11 +52,16 @@ export async function createManufacturer(
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al crear el artesano", error: error });
+    res
+      .status(500)
+      .json({ message: "Error al crear el artesano", error: error });
   }
 }
 
-export async function updateManufacturer(req: Request<{ id: string }, {}, Manufacturer>, res: Response) {
+export async function updateManufacturer(
+  req: Request<{ id: string }, {}, Manufacturer>,
+  res: Response
+) {
   const manufacturerId = new ObjectId(req.params.id);
   const manufacturer: Manufacturer = req.body;
   if (!isManufacturer(manufacturer)) {
@@ -42,17 +72,24 @@ export async function updateManufacturer(req: Request<{ id: string }, {}, Manufa
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al actualizar el artesano", error: error });
+    res
+      .status(500)
+      .json({ message: "Error al actualizar el artesano", error: error });
   }
 }
 
-export async function deleteManufacturer(req: Request<{ id: string }>, res: Response) {
+export async function deleteManufacturer(
+  req: Request<{ id: string }>,
+  res: Response
+) {
   const manufacturerId = req.params.id;
   try {
     const result = await deleteManufacturerModel(new ObjectId(manufacturerId));
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al eliminar el artesano", error: error });
+    res
+      .status(500)
+      .json({ message: "Error al eliminar el artesano", error: error });
   }
 }
