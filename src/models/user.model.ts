@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { clientDB, database } from "../db/database";
 import { User, UserUpdate } from "../types/User";
-import { hashPassword } from "../utils/password-utils";
+import { comparePassword, hashPassword } from "../utils/password-utils";
 
 export async function getUsers() {
     try {
@@ -59,8 +59,16 @@ export async function insertUser(user: User) {
 
 export async function updateUser(userId: string, user: User) {
     try {
+        const oldUser = await getUserById(userId);
+        if (!oldUser) {
+            throw new Error("Usuario no encontrado");
+        }
+        const isSamePassword = await comparePassword(user.password, oldUser.password);
+        if (isSamePassword === false) {
+            user.password = await hashPassword(user.password);
+        }
         await clientDB.connect();
-        user.updatedAt = Date.now();
+        user.updatedAt = Date.now();        
         const result = await database.collection("Users").updateOne({ _id: new ObjectId(userId) }, { $set: user });
         // await clientDB.close();
         return result;
