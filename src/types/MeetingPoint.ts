@@ -13,6 +13,12 @@ export type MeetingPoint = {
 export type CreateMeetingPoint = Omit<MeetingPoint, 'uuid'>;
 export type UpdateMeetingPoint = Omit<MeetingPoint, 'uuid' | 'isDeleted'>;
 
+export type MeetingPointFilters = {
+    manufacturerId?: string;
+    name?: string;
+    description?: string;
+}
+
 export function isCreateMeetingPoint(meetingPoint: unknown): meetingPoint is CreateMeetingPoint {
     return (
         meetingPoint !== undefined &&

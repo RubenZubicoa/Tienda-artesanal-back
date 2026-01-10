@@ -20,13 +20,13 @@ export async function getOrdersByFilters(filters: OrderFilters) {
         await clientDB.connect();
         const query: Filter<any> = {};
         if (filters.username) {
-            query.username = filters.username;
+            query.username = { $regex: filters.username, $options: 'i' };
         }
         if (filters.phone) {
-            query.phone = filters.phone;
+            query.phone = { $regex: filters.phone, $options: 'i' };
         }
         if (filters.email) {
-            query.email = filters.email;
+            query.email = { $regex: filters.email, $options: 'i' };
         }
         if (filters.status) {
             query.status = filters.status;
@@ -39,7 +39,7 @@ export async function getOrdersByFilters(filters: OrderFilters) {
 
         }
         if (filters.manufacturerId) {
-            query.manufacturerId = filters.manufacturerId;
+            query.manufacturerId = { $regex: filters.manufacturerId, $options: 'i' };
         }
         const orders = await database
             .collection<Order>("Orders")

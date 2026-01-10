@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { isManufacturer, Manufacturer } from "../types/Manufacturer";
+import { isManufacturer, Manufacturer, ManufacturerFilters } from "../types/Manufacturer";
 import {
   insertManufacturer,
   getManufacturers as getManufacturersModel,
   updateManufacturer as updateManufacturerModel,
   deleteManufacturer as deleteManufacturerModel,
   getManufacturerById as getManufacturerByIdModel,
+  getManufacturersByFilters as getManufacturersByFiltersModel,
 } from "../models/manufacturer.model";
 import { ObjectId } from "mongodb";
 
@@ -18,6 +19,17 @@ export async function getManufacturers(req: Request, res: Response) {
     res
       .status(500)
       .json({ message: "Error al obtener los artesanos", error: error });
+  }
+}
+
+export async function getManufacturersByFilters(req: Request<{}, {}, ManufacturerFilters>, res: Response) {
+  const filters: ManufacturerFilters = req.body;
+  try {
+    const manufacturers = await getManufacturersByFiltersModel(filters);
+    res.status(200).json(manufacturers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los artesanos", error: error });
   }
 }
 

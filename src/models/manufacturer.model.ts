@@ -1,10 +1,34 @@
+import { Filter } from "mongodb";
 import { clientDB, database } from "../db/database";
-import { Manufacturer } from "../types/Manufacturer";
+import { Manufacturer, ManufacturerFilters } from "../types/Manufacturer";
 
 export async function getManufacturers() {
     try {
         await clientDB.connect();
         const manufacturers = await database.collection("Manufacturers").find({ isDeleted: false }).toArray();
+        await clientDB.close();
+        return manufacturers;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener los artesanos");
+    }
+}
+
+export async function getManufacturersByFilters(filters: ManufacturerFilters) {
+    try {
+        await clientDB.connect();
+        const query: Filter<Manufacturer> = {};
+        if (filters.name) {
+            query.name = { $regex: filters.name, $options: 'i' };
+        }
+        if (filters.address) {
+            query.address = { $regex: filters.address, $options: 'i' };
+        }
+        if (filters.description) {
+            query.description = { $regex: filters.description, $options: 'i' };
+        }
+        const manufacturers = await database.collection<Manufacturer>("Manufacturers").find(query).toArray();
         await clientDB.close();
         return manufacturers;
     } catch (error) {

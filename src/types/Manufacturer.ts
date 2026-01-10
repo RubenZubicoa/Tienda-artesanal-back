@@ -16,6 +16,12 @@ export type Manufacturer = {
   isDeleted?: boolean;
 };
 
+export type ManufacturerFilters = {
+  name?: string;
+  address?: string;
+  description?: string;
+}
+
 export function isManufacturer(
   manufacturer: unknown
 ): manufacturer is Manufacturer {

@@ -1,10 +1,43 @@
+import { Filter } from "mongodb";
 import { clientDB, database } from "../db/database";
-import { Product } from "../types/Product";
+import { Product, ProductFilters } from "../types/Product";
 
 export async function getProducts() {
     try {
         await clientDB.connect();
         const products = await database.collection("Products").find({ isDeleted: false }).toArray();
+        await clientDB.close();
+        return products;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener los productos");
+    }
+}
+
+export async function getProductsByFilters(filters: ProductFilters) {
+    try {
+        await clientDB.connect();
+        const query: Filter<Product> = {};
+        if (filters.manufacturerId) {
+            query.manufacturerId = { $regex: filters.manufacturerId, $options: 'i' };
+        }
+        if (filters.name) {
+            query.name = { $regex: filters.name, $options: 'i' };
+        }
+        if (filters.description) {
+            query.description = { $regex: filters.description, $options: 'i' };
+        }
+        if (filters.price) {
+            query.price = { $gte: filters.price.start, $lte: filters.price.end };
+        }
+        if (filters.inStock) {
+            query.stock = { $gt: 0 };
+        }
+        if (filters.category) {
+            query.category = { $regex: filters.category, $options: 'i' };
+        }
+        const products = await database.collection<Product>("Products").find(query).toArray();
         await clientDB.close();
         return products;
     } catch (error) {

@@ -1,11 +1,34 @@
-import { ObjectId } from "mongodb";
+import { Filter, ObjectId } from "mongodb";
 import { clientDB, database } from "../db/database";
-import { CreateMeetingPoint, MeetingPoint, UpdateMeetingPoint } from "../types/MeetingPoint";
+import { CreateMeetingPoint, MeetingPoint, MeetingPointFilters, UpdateMeetingPoint } from "../types/MeetingPoint";
 
 export async function getMeetingPointsByManufacturerId(manufacturerId: string) {
     try {
         await clientDB.connect();
         const meetingPoints = await database.collection("MeetingPoints").find({ manufacturerId: manufacturerId, isDeleted: false }).toArray();
+        await clientDB.close();
+        return meetingPoints;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener los puntos de encuentro");
+    }
+}
+
+export async function getMeetingPointsByFilters(filters: MeetingPointFilters) {
+    try {
+        await clientDB.connect();
+        const query: Filter<MeetingPoint> = {};
+        if (filters.manufacturerId) {
+            query.manufacturerId = { $regex: filters.manufacturerId, $options: 'i' };
+        }
+        if (filters.name) {
+            query.name = { $regex: filters.name, $options: 'i' };
+        }
+        if (filters.description) {
+            query.description = { $regex: filters.description, $options: 'i' };
+        }
+        const meetingPoints = await database.collection<MeetingPoint>("MeetingPoints").find(query).toArray();
         await clientDB.close();
         return meetingPoints;
     } catch (error) {

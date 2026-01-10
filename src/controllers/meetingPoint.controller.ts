@@ -1,11 +1,22 @@
 import { Request, Response } from "express";
-import { getMeetingPointsByManufacturerId as getMeetingPointsByManufacturerIdModel, createMeetingPoint as createMeetingPointModel, updateMeetingPoint as updateMeetingPointModel, deleteMeetingPoint as deleteMeetingPointModel } from "../models/meetingPoint.model";
-import { isCreateMeetingPoint, isUpdateMeetingPoint, MeetingPoint, UpdateMeetingPoint } from "../types/MeetingPoint";
+import { getMeetingPointsByManufacturerId as getMeetingPointsByManufacturerIdModel, createMeetingPoint as createMeetingPointModel, updateMeetingPoint as updateMeetingPointModel, deleteMeetingPoint as deleteMeetingPointModel, getMeetingPointsByFilters as getMeetingPointsByFiltersModel } from "../models/meetingPoint.model";
+import { isCreateMeetingPoint, isUpdateMeetingPoint, MeetingPoint, MeetingPointFilters, UpdateMeetingPoint } from "../types/MeetingPoint";
 
 export async function getMeetingPointsByManufacturerId(req: Request<{ manufacturerId: string }>, res: Response) {
     const manufacturerId = req.params.manufacturerId;
     try {
         const meetingPoints = await getMeetingPointsByManufacturerIdModel(manufacturerId);
+        res.status(200).json(meetingPoints);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener los puntos de encuentro", error: error });
+    }
+}
+
+export async function getMeetingPointsByFilters(req: Request<{}, {}, MeetingPointFilters>, res: Response) {
+    const filters: MeetingPointFilters = req.body;
+    try {
+        const meetingPoints = await getMeetingPointsByFiltersModel(filters);
         res.status(200).json(meetingPoints);
     } catch (error) {
         console.error(error);

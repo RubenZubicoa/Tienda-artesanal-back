@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { getManufacturers, createManufacturer, deleteManufacturer, updateManufacturer, getManufacturerById } from "../controllers/manufacturer.controller";
+import { getManufacturers, createManufacturer, deleteManufacturer, updateManufacturer, getManufacturerById, getManufacturersByFilters } from "../controllers/manufacturer.controller";
 
 export const manufacturerRoutes = Router();
 
 manufacturerRoutes.get('/', getManufacturers);
+
+manufacturerRoutes.post('/criteria', getManufacturersByFilters);
 
 manufacturerRoutes.get('/:id', getManufacturerById);
 

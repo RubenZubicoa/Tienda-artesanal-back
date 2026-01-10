@@ -6,8 +6,9 @@ import {
   deleteProduct as deleteProductModel,
   getProductsByManufacturerId as getProductsByManufacturerIdModel,
   getProductById as getProductByIdModel,
+  getProductsByFilters as getProductsByFiltersModel,
 } from "../models/product.model";
-import { isProduct, Product } from "../types/Product";
+import { isProduct, Product, ProductFilters } from "../types/Product";
 import { ObjectId } from "mongodb";
 
 export async function getProducts(req: Request, res: Response) {
@@ -19,6 +20,17 @@ export async function getProducts(req: Request, res: Response) {
     res
       .status(500)
       .json({ message: "Error al obtener los productos", error: error });
+  }
+}
+
+export async function getProductsByFilters(req: Request<{}, {}, ProductFilters>, res: Response) {
+  const filters: ProductFilters = req.body;
+  try {
+    const products = await getProductsByFiltersModel(filters);
+    res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los productos", error: error });
   }
 }
 

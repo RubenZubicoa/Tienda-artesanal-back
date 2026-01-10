@@ -14,6 +14,18 @@ export type Product = {
     isDeleted?: boolean;
 }
 
+export type ProductFilters = {
+    manufacturerId?: string;
+    name?: string;
+    description?: string;
+    price?: {
+        start?: number;
+        end?: number;
+    },
+    inStock?: boolean;
+    category?: string;
+}
+
 export function isProduct(product: unknown): product is Product {
     return (
         product !== undefined &&
