@@ -18,8 +18,6 @@ export type Manufacturer = {
 
 export type ManufacturerFilters = {
   name?: string;
-  address?: string;
-  description?: string;
 }
 
 export function isManufacturer(

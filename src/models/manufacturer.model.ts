@@ -22,12 +22,7 @@ export async function getManufacturersByFilters(filters: ManufacturerFilters) {
         if (filters.name) {
             query.name = { $regex: filters.name, $options: 'i' };
         }
-        if (filters.address) {
-            query.address = { $regex: filters.address, $options: 'i' };
-        }
-        if (filters.description) {
-            query.description = { $regex: filters.description, $options: 'i' };
-        }
+        query.isDeleted = false;
         const manufacturers = await database.collection<Manufacturer>("Manufacturers").find(query).toArray();
         await clientDB.close();
         return manufacturers;

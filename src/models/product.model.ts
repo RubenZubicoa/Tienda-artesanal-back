@@ -28,8 +28,11 @@ export async function getProductsByFilters(filters: ProductFilters) {
         if (filters.description) {
             query.description = { $regex: filters.description, $options: 'i' };
         }
-        if (filters.price) {
-            query.price = { $gte: filters.price.start, $lte: filters.price.end };
+        if (filters.price?.start) {
+            query.price = { $gte: filters.price.start };
+        }
+        if (filters.price?.end) {
+            query.price = { $lte: filters.price.end };
         }
         if (filters.inStock) {
             query.stock = { $gt: 0 };
@@ -37,6 +40,7 @@ export async function getProductsByFilters(filters: ProductFilters) {
         if (filters.category) {
             query.category = { $regex: filters.category, $options: 'i' };
         }
+        query.isDeleted = false;
         const products = await database.collection<Product>("Products").find(query).toArray();
         await clientDB.close();
         return products;

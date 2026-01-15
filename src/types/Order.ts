@@ -27,6 +27,7 @@ export type Order = {
         price: number;
     }[];
     manufacturerId: string;
+    meetingPointId?: string;
     status: OrderStatus;
     createdAt: number;
     updatedAt?: number;
@@ -41,7 +42,6 @@ export function isOrder(order: unknown): order is Order {
         order !== null &&
         typeof order === "object" &&
         "username" in order &&
-        "address" in order &&
         "phone" in order &&
         "email" in order &&
         "products" in order &&
@@ -57,7 +57,6 @@ export function isAddOrder(order: unknown): order is AddOrder {
         order !== null &&
         typeof order === "object" &&
         "username" in order &&
-        "address" in order &&
         "phone" in order &&
         "email" in order &&
         "products" in order &&
@@ -71,7 +70,6 @@ export function isUpdateOrder(order: unknown): order is UpdateOrder {
         order !== null &&
         typeof order === "object" &&
         "username" in order &&
-        "address" in order &&
         "phone" in order &&
         "email" in order &&
         "products" in order &&

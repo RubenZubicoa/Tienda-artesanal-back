@@ -28,6 +28,7 @@ export async function getMeetingPointsByFilters(filters: MeetingPointFilters) {
         if (filters.description) {
             query.description = { $regex: filters.description, $options: 'i' };
         }
+        query.isDeleted = false;
         const meetingPoints = await database.collection<MeetingPoint>("MeetingPoints").find(query).toArray();
         await clientDB.close();
         return meetingPoints;
