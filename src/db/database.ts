@@ -1,11 +1,12 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const connectionString = process.env.MONGO_URI || 'mongodb://localhost:27017/tienda';
-// Replace the placeholder with your Atlas connection string
-const uri = "mongodb+srv://rubenzubicoatic_db_user:nJSfg6ckTM3Av6fa@cluster0.rcwxcg8.mongodb.net/?appName=Cluster0";
+const connectionString = process.env.MONGO_URI;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const clientDB = new MongoClient(uri,  {
+if (!connectionString) {
+    throw new Error("MONGO_URI is not set");
+}
+
+const clientDB = new MongoClient(connectionString,  {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,

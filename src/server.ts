@@ -31,7 +31,4 @@ server.use('/api/login', loginRoutes);
 server.use('/api/meeting-points', meetingPointRoutes);
 server.use('/api/product-images', productImagesRoutes);
 
-// this folder for application will be used to store public files
-server.use('/uploads', express.static(path.resolve('uploads')));
-
 export default server;
