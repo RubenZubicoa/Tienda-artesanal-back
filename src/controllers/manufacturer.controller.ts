@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { isManufacturer, Manufacturer, ManufacturerFilters } from "../types/Manufacturer";
 import {
   insertManufacturer,
@@ -12,15 +12,12 @@ import {
 import { ObjectId } from "mongodb";
 import { uploadToCloudinary } from "../libs/cloudinary";
 
-export async function getManufacturers(req: Request, res: Response) {
+export async function getManufacturers(req: Request, res: Response, next: NextFunction) {
   try {
     const manufacturers = await getManufacturersModel();
     res.status(200).json(manufacturers);
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "Error al obtener los artesanos", error: error });
+    next(error);
   }
 }
 

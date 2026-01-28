@@ -2,6 +2,7 @@ import { Filter, ObjectId } from "mongodb";
 import { clientDB, database } from "../db/database";
 import { Manufacturer, ManufacturerFilters } from "../types/Manufacturer";
 import fs from "fs";
+import { logger } from "../libs/logger";
 
 export async function getManufacturers() {
     try {
@@ -11,7 +12,7 @@ export async function getManufacturers() {
         return manufacturers;
     } catch (error) {
         await clientDB.close();
-        console.error(error);
+        logger.error((error as Error).message, { error: (error as Error).message, stack: (error as Error).stack, timestamp: new Date().toISOString() });
         throw new Error("Error al obtener los artesanos");
     }
 }
