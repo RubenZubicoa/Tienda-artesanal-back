@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type MeetingPoint = {
-    uuid: string;
+    _id?: ObjectId;
     name: string;
     location: {
         latitude: number;

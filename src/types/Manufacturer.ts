@@ -10,7 +10,6 @@ export type Manufacturer = {
   description: string;
   website?: string;
   image?: string;
-  meetingPoints?: MeetingPoint[];
   createdAt: number;
   updatedAt?: number;
   isDeleted?: boolean;
@@ -18,6 +17,10 @@ export type Manufacturer = {
 
 export type ManufacturerFilters = {
   name?: string;
+}
+
+export type ManufacturerWithMeetingPoints = Manufacturer & {
+  meetingPoints: MeetingPoint[];
 }
 
 export function isManufacturer(
@@ -34,3 +37,4 @@ export function isManufacturer(
     "description" in manufacturer
   );
 }
+

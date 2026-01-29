@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getManufacturers, createManufacturer, deleteManufacturer, updateManufacturer, getManufacturerById, getManufacturersByFilters, uploadManufacturerImage } from "../controllers/manufacturer.controller";
+import { getManufacturers, createManufacturer, deleteManufacturer, updateManufacturer, getManufacturerById, getManufacturersByFilters, uploadManufacturerImage, getManufacturerByIdWithMeetingPoints } from "../controllers/manufacturer.controller";
 import multer from "../libs/multer";
 
 export const manufacturerRoutes = Router();
@@ -7,6 +7,8 @@ export const manufacturerRoutes = Router();
 manufacturerRoutes.get('/', getManufacturers);
 
 manufacturerRoutes.get('/:id', getManufacturerById);
+
+manufacturerRoutes.get('/:id/meeting-points', getManufacturerByIdWithMeetingPoints);
 
 manufacturerRoutes.post('/criteria', getManufacturersByFilters);
 

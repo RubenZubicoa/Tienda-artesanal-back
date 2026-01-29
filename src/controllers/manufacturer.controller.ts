@@ -8,6 +8,7 @@ import {
   getManufacturerById as getManufacturerByIdModel,
   getManufacturersByFilters as getManufacturersByFiltersModel,
   uploadManufacturerImage as uploadManufacturerImageModel,
+  getManufacturerByIdWithMeetingPoints as getManufacturerByIdWithMeetingPointsModel,
 } from "../models/manufacturer.model";
 import { ObjectId } from "mongodb";
 import { uploadToCloudinary } from "../libs/cloudinary";
@@ -39,7 +40,7 @@ export async function getManufacturerById(
   const manufacturerId = req.params.id;
   try {
     const manufacturer = await getManufacturerByIdModel(
-      new ObjectId(manufacturerId)
+      manufacturerId
     );
     res.status(200).json(manufacturer);
   } catch (error) {
@@ -47,6 +48,20 @@ export async function getManufacturerById(
     res
       .status(500)
       .json({ message: "Error al obtener el artesano", error: error });
+  }
+}
+
+export async function getManufacturerByIdWithMeetingPoints(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  const manufacturerId = req.params.id;
+  try {
+    const manufacturer = await getManufacturerByIdWithMeetingPointsModel(manufacturerId);
+    res.status(200).json(manufacturer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener el artesano con los puntos de encuentro", error: error });
   }
 }
 
