@@ -102,7 +102,7 @@ export async function deleteOrder(req: Request<{ id: string }>, res: Response) {
 
 
 async function sendEmailOrderCreated(order: AddOrder) {
-    const manufacturer = await getManufacturerByIdModel(new ObjectId(order.manufacturerId));
+    const manufacturer = await getManufacturerByIdModel(order.manufacturerId);
     const tableProducts = order.products.map(product => `<tr><td>${product.name}</td><td>${product.price}</td><td>${product.quantity}</td></tr>`).join("");
     const total = order.products.reduce((acc, product) => acc + product.price * product.quantity, 0);
     const body = `<b>Pedido creado correctamente</b><br><br>
